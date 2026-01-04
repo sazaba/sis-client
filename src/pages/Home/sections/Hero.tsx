@@ -1,13 +1,7 @@
 export default function Hero() {
   return (
-    <section
-      className="
-        px-6
-        pt-[72px]   /* 👈 altura del navbar (ajusta a 64/72/80 según tu header) */
-        pb-16 sm:pb-20
-        bg-gradient-to-b from-zinc-950 via-zinc-950/80 to-transparent
-      "
-    >
+    <section className="px-6 pt-[76px] bg-gradient-to-b from-zinc-950 via-zinc-950/80 to-transparent">
+
       <div className="mx-auto max-w-6xl py-14 sm:py-16">
         <div className="max-w-2xl">
           <p className="text-xs font-medium uppercase tracking-widest text-zinc-400">
