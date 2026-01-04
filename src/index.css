@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ================================
+   Base typography (2025 premium)
+================================ */
+
+html {
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+/* Headings — moderna, redonda, SaaS */
+h1,
+h2,
+h3,
+h4 {
+  font-family: "Poppins", system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* Optional fine-tuning per level */
+h1 {
+  letter-spacing: -0.025em;
+}
+
+h2 {
+  letter-spacing: -0.02em;
+}
+
+h3 {
+  letter-spacing: -0.015em;
+}
+
+/* Text selection */
+::selection {
+  background: rgba(56, 189, 248, 0.25); /* cyan */
+}
+
+/* Motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
