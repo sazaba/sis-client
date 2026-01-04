@@ -2,10 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ================================
-   Base typography (2025 premium)
-================================ */
+/* =========================================
+   Global base styles — Premium SaaS (2025)
+========================================= */
 
+/* Root / HTML */
 html {
   font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -13,7 +14,10 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Headings — moderna, redonda, SaaS */
+/* =========================================
+   Headings typography
+========================================= */
+
 h1,
 h2,
 h3,
@@ -23,7 +27,7 @@ h4 {
   letter-spacing: -0.02em;
 }
 
-/* Optional fine-tuning per level */
+/* Fine tuning per level */
 h1 {
   letter-spacing: -0.025em;
 }
@@ -36,24 +40,36 @@ h3 {
   letter-spacing: -0.015em;
 }
 
-/* Text selection */
+/* =========================================
+   Text selection
+========================================= */
+
 ::selection {
-  background: rgba(56, 189, 248, 0.25); /* cyan */
+  background: rgba(56, 189, 248, 0.25); /* cyan-400 */
 }
 
-/* Motion accessibility */
+/* =========================================
+   Motion & accessibility
+========================================= */
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 }
 
-/* Mobile performance kill-switch */
+/* =========================================
+   Mobile performance kill-switch
+   (Disable heavy visuals without JS)
+========================================= */
+
 @media (max-width: 640px) {
+  /* Completely remove decorative layers */
   [data-mobile="off"] {
     display: none !important;
   }
 
+  /* Neutralize expensive effects */
   [data-mobile="simple"] {
     filter: none !important;
     backdrop-filter: none !important;
