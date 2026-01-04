@@ -47,3 +47,15 @@ h3 {
     scroll-behavior: auto;
   }
 }
+
+/* Mobile performance kill-switch */
+@media (max-width: 640px) {
+  [data-mobile="off"] {
+    display: none !important;
+  }
+
+  [data-mobile="simple"] {
+    filter: none !important;
+    backdrop-filter: none !important;
+  }
+}
