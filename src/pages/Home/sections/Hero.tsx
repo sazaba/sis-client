@@ -1,6 +1,10 @@
 export default function Hero() {
   return (
-    <section className="relative px-6 pt-[76px] overflow-hidden bg-zinc-950">
+      <section
+      id="hero"
+      className="relative px-6 overflow-hidden bg-zinc-950"
+      style={{ paddingTop: "var(--nav-h, 76px)" }} // 👈 exacto al pixel
+    >
       {/* 🌿 Glow verde decorativo */}
       <div className="pointer-events-none absolute inset-0">
         {/* Mancha verde principal */}
