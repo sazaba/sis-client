@@ -3,131 +3,90 @@ import { motion } from "framer-motion";
 export default function CTA() {
   return (
     <section id="contacto" className="px-6">
-      <div className="mx-auto max-w-6xl py-16 sm:py-20">
+      <div className="mx-auto max-w-6xl py-12 sm:py-16">
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.25 }}
-          transition={{ duration: 0.55, ease: "easeOut" }}
-          className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.04]"
+          transition={{ duration: 0.35, ease: "easeOut" }}
+          className="relative overflow-hidden rounded-[26px] border border-white/10 bg-white/[0.035]"
         >
-          {/* Background (premium) */}
+          {/* Background (lightweight) */}
           <div className="pointer-events-none absolute inset-0">
-            <div className="absolute inset-0 bg-gradient-to-b from-white/[0.06] via-transparent to-transparent" />
-            <div className="absolute -top-28 -left-28 h-72 w-72 rounded-full bg-cyan-500/16 blur-3xl" />
-            <div className="absolute -bottom-32 -right-24 h-80 w-80 rounded-full bg-fuchsia-500/14 blur-3xl" />
-            <div className="absolute inset-0 opacity-[0.10] [background-image:linear-gradient(to_right,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:72px_72px]" />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-zinc-950/50" />
+            <div className="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-cyan-500/14 blur-3xl" />
+            <div className="absolute -bottom-28 -right-24 h-72 w-72 rounded-full bg-fuchsia-500/12 blur-3xl" />
+            <div className="absolute inset-0 bg-gradient-to-b from-white/[0.06] via-transparent to-zinc-950/55" />
           </div>
 
-          {/* Content */}
-          <div className="relative grid gap-10 p-7 sm:p-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-stretch">
-            {/* Left: Offer / Copy */}
-            <div className="flex flex-col justify-between">
-              <div>
-                {/* Badge */}
-                <p className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-zinc-200">
-                  <span className="h-1.5 w-1.5 rounded-full bg-cyan-300/80" />
-                  Asesoría inicial • Diagnóstico rápido
-                </p>
+          <div className="relative grid gap-6 p-6 sm:p-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+            {/* Left (short copy) */}
+            <div className="max-w-xl">
+              <p className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-zinc-200">
+                <span className="h-1.5 w-1.5 rounded-full bg-cyan-300/80" />
+                Diagnóstico rápido
+              </p>
 
-                {/* Headline */}
-                <h2 className="mt-4 font-heading text-3xl font-semibold tracking-[-0.02em] text-white sm:text-4xl leading-[1.06]">
-                  Te decimos exactamente qué falta para cumplir (y cómo cerrarlo con evidencia).
-                </h2>
+              <h2 className="mt-4 font-heading text-2xl sm:text-3xl font-semibold tracking-[-0.02em] text-white leading-[1.08]">
+                Te decimos qué falta y cómo cerrarlo con evidencia.
+              </h2>
 
-                {/* Subcopy */}
-                <p className="mt-4 text-base leading-relaxed text-zinc-300">
-                  Revisamos tu estado actual del SG-SST y te proponemos un plan accionable con
-                  prioridades, responsables y soportes. Sin humo: lo que se ejecuta, se mide y se demuestra.
-                </p>
+              <p className="mt-3 text-sm sm:text-base leading-relaxed text-zinc-300">
+                Plan claro, prioridades y soporte listo para auditoría. Sin vueltas.
+              </p>
 
-                {/* Mini list (value) */}
-                <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                  <ValueItem title="Checklist real" desc="Hallazgos claros y prioridades por impacto." />
-                  <ValueItem title="Plan de cierre" desc="Responsables, fechas y verificación." />
-                  <ValueItem title="Evidencia lista" desc="Documentos y soportes consistentes." />
-                  <ValueItem title="Rumbo claro" desc="Qué hacer primero, segundo y tercero." />
-                </div>
-
-                {/* Chips */}
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {["Inspecciones", "Capacitaciones", "Comités", "Documentación", "Plan de trabajo"].map((t) => (
-                    <span
-                      key={t}
-                      className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-zinc-200"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-
-                <p className="mt-6 text-sm text-zinc-400">
-                  Si ya tienes documentos, los revisamos y ajustamos para que queden consistentes y listos para auditoría.
-                </p>
-              </div>
-
-              {/* Micro proof row */}
-              <div className="mt-8 grid gap-3 sm:grid-cols-3">
-                <ProofMini kpi="24–48h" label="Respuesta" />
-                <ProofMini kpi="100%" label="Trazable" />
-                <ProofMini kpi="0 humo" label="Accionable" />
+              {/* compact proof */}
+              <div className="mt-5 flex flex-wrap gap-2">
+                <MiniTag>24–48h respuesta</MiniTag>
+                <MiniTag>Accionable</MiniTag>
+                <MiniTag>Trazable</MiniTag>
               </div>
             </div>
 
-            {/* Right: Form (ultra premium) */}
+            {/* Right (compact form) */}
             <div className="relative">
-              {/* outer glow */}
-              <div className="pointer-events-none absolute -inset-6 rounded-[32px] bg-gradient-to-b from-white/10 via-transparent to-transparent opacity-70 blur-2xl" />
+              <div className="pointer-events-none absolute -inset-4 rounded-[26px] bg-gradient-to-b from-white/10 via-transparent to-transparent opacity-70 blur-2xl" />
 
-              <div className="relative h-full rounded-[28px] border border-white/10 bg-zinc-950/40 p-6 sm:p-7">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <h3 className="font-heading text-lg font-semibold tracking-[-0.01em] text-white">
-                      Agenda tu asesoría
-                    </h3>
-                    <p className="mt-2 text-sm text-zinc-400">
-                      Déjanos tus datos y te contactamos para agendar y entender tu necesidad.
-                    </p>
-                  </div>
-
-                  {/* Decorative dot */}
-                  <motion.span
-                    aria-hidden="true"
-                    className="mt-1 h-2 w-2 rounded-full bg-white/70"
-                    animate={{ opacity: [0.25, 1, 0.25], scale: [1, 1.45, 1] }}
-                    transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-                  />
+              <div className="relative rounded-[22px] border border-white/10 bg-zinc-950/35 p-5 sm:p-6">
+                <div className="flex items-center justify-between gap-3">
+                  <h3 className="font-heading text-base sm:text-lg font-semibold tracking-[-0.01em] text-white">
+                    Agenda tu asesoría
+                  </h3>
+                  <span className="h-2 w-2 rounded-full bg-white/70 opacity-70" />
                 </div>
 
-                {/* Divider */}
-                <div className="pointer-events-none mt-5 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                <p className="mt-2 text-xs sm:text-sm text-zinc-400">
+                  Déjanos tus datos y te contactamos por WhatsApp.
+                </p>
+
+                <div className="pointer-events-none mt-4 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
                 <form
-                  className="mt-5 grid gap-3"
+                  className="mt-4 grid gap-3"
                   onSubmit={(e) => {
                     e.preventDefault();
                     // conecta a tu backend / whatsapp / email
                   }}
                 >
-                  <Field label="Nombre" name="name" placeholder="Tu nombre" autoComplete="name" />
-                  <Field label="WhatsApp" name="phone" placeholder="+57 3XX XXX XXXX" autoComplete="tel" />
+                  {/* 2 cols desde sm para que no se vea eterno */}
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <Field name="name" placeholder="Nombre" autoComplete="name" />
+                    <Field name="phone" placeholder="WhatsApp" autoComplete="tel" />
+                  </div>
+
                   <Field
-                    label="Empresa (opcional)"
                     name="company"
-                    placeholder="Nombre de la empresa"
+                    placeholder="Empresa (opcional)"
                     autoComplete="organization"
                   />
 
-                  <div className="mt-2 grid gap-3 sm:grid-cols-2">
+                  <div className="mt-1 grid gap-3 sm:grid-cols-2">
                     <motion.button
                       whileHover={{ y: -1 }}
                       whileTap={{ scale: 0.98 }}
-                      className="relative inline-flex h-11 items-center justify-center overflow-hidden rounded-full bg-white px-5 text-sm font-semibold text-zinc-950 transition hover:opacity-95"
+                      className="inline-flex h-11 items-center justify-center rounded-full bg-white px-5 text-sm font-semibold text-zinc-950 transition hover:opacity-95"
                       type="submit"
                     >
-                      <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-black/10 to-transparent animate-[shimmer_2.4s_infinite]" />
-                      Solicitar asesoría
+                      Solicitar
                     </motion.button>
 
                     <a
@@ -138,77 +97,46 @@ export default function CTA() {
                     </a>
                   </div>
 
-                  <p className="mt-2 text-xs text-zinc-500">
-                    Al enviar, aceptas ser contactado para fines de asesoría. No spam.
+                  <p className="mt-1 text-[11px] leading-relaxed text-zinc-500">
+                    Sin spam. Solo contacto para agendar.
                   </p>
                 </form>
-
-                {/* bottom micro accent */}
-                <div className="pointer-events-none mt-6 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-                <p className="mt-4 text-xs text-zinc-500">
-                  Tip: Si ya cuentas con Plan de Trabajo, Matriz y Actas, tráelas. Te damos un diagnóstico más rápido.
-                </p>
               </div>
             </div>
           </div>
 
-          {/* Bottom line */}
           <div className="pointer-events-none relative h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-
-          {/* shimmer keyframes */}
-          <style>{`
-            @keyframes shimmer {
-              0% { transform: translateX(-120%); }
-              100% { transform: translateX(120%); }
-            }
-          `}</style>
         </motion.div>
       </div>
     </section>
   );
 }
 
-/* ---------------- small components ---------------- */
+/* --------- tiny components (minimal) --------- */
 
 function Field({
-  label,
   name,
   placeholder,
   autoComplete,
 }: {
-  label: string;
   name: string;
   placeholder: string;
   autoComplete?: string;
 }) {
   return (
-    <label className="grid gap-1">
-      <span className="text-xs font-semibold text-zinc-300">{label}</span>
-      <input
-        className="h-11 rounded-2xl border border-white/10 bg-white/5 px-4 text-sm text-white placeholder:text-zinc-500 outline-none focus:border-white/20 focus:bg-white/10 transition"
-        placeholder={placeholder}
-        name={name}
-        autoComplete={autoComplete}
-      />
-    </label>
+    <input
+      name={name}
+      autoComplete={autoComplete}
+      placeholder={placeholder}
+      className="h-11 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-sm text-white placeholder:text-zinc-500 outline-none transition focus:border-white/20 focus:bg-white/10"
+    />
   );
 }
 
-function ValueItem({ title, desc }: { title: string; desc: string }) {
+function MiniTag({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-      <p className="font-heading text-sm font-semibold tracking-[-0.01em] text-white">{title}</p>
-      <p className="mt-1 text-sm leading-relaxed text-zinc-400">{desc}</p>
-    </div>
+    <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-zinc-200">
+      {children}
+    </span>
   );
 }
-
-function ProofMini({ kpi, label }: { kpi: string; label: string }) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3">
-      <p className="font-heading text-sm font-semibold tracking-[-0.01em] text-white">{kpi}</p>
-      <p className="mt-1 text-xs text-zinc-400">{label}</p>
-    </div>
-  );
-}
-  
