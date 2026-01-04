@@ -1,6 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 
+const NAV_ITEMS = [
+  { href: "#hero", label: "Inicio" },
+  { href: "#galeria", label: "Galería" },
+  { href: "#features", label: "Servicios" },
+  { href: "#cta", label: "CTA" },
+];
+
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement | null>(null);
@@ -14,7 +21,7 @@ export default function Navbar() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // ✅ Bloquea scroll del body cuando está abierto (mejor UX móvil)
+  // ✅ Bloquea scroll del body cuando está abierto
   useEffect(() => {
     if (!open) return;
     const prev = document.body.style.overflow;
@@ -24,7 +31,7 @@ export default function Navbar() {
     };
   }, [open]);
 
-  // ✅ Cierra al cambiar tamaño a desktop
+  // ✅ Cierra al cambiar a desktop
   useEffect(() => {
     const onResize = () => {
       if (window.innerWidth >= 640) setOpen(false);
@@ -36,8 +43,27 @@ export default function Navbar() {
   const close = () => setOpen(false);
   const toggle = () => setOpen((v) => !v);
 
+  // ✅ Smooth scroll premium + cierre del menú
+  const go = (href: string) => (e: React.MouseEvent) => {
+    // permite enlaces normales si no es hash
+    if (!href.startsWith("#")) return;
+
+    e.preventDefault();
+    close();
+
+    const id = href.slice(1);
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    // altura del navbar (~76px). Ajusta si cambias header.
+    const headerOffset = 76;
+    const top = el.getBoundingClientRect().top + window.scrollY - headerOffset;
+
+    window.scrollTo({ top, behavior: "smooth" });
+  };
+
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-zinc-950/70 backdrop-blur">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-zinc-950/75 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         {/* Brand */}
         <Link to="/" className="flex items-center gap-3">
@@ -58,18 +84,16 @@ export default function Navbar() {
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-8 sm:flex">
-          <a className="text-sm font-medium text-zinc-400 hover:text-white transition-colors" href="#features">
-            Contenido
-          </a>
-          <a className="text-sm font-medium text-zinc-400 hover:text-white transition-colors" href="#bonos">
-            Bonos
-          </a>
-          <a className="text-sm font-medium text-zinc-400 hover:text-white transition-colors" href="#testimonios">
-            Testimonios
-          </a>
-          <a className="text-sm font-medium text-zinc-400 hover:text-white transition-colors" href="#faq">
-            FAQ
-          </a>
+          {NAV_ITEMS.map((it) => (
+            <a
+              key={it.href}
+              href={it.href}
+              onClick={go(it.href)}
+              className="text-sm font-medium text-zinc-300 hover:text-white transition-colors"
+            >
+              {it.label}
+            </a>
+          ))}
 
           <NavLink
             to="/"
@@ -91,8 +115,8 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* ✅ Mobile Menu (Ultra premium, ultra light) */}
-      {/* Overlay */}
+      {/* ✅ Mobile Menu */}
+      {/* Overlay (más oscuro para legibilidad) */}
       <div
         className={[
           "sm:hidden fixed inset-0 z-40",
@@ -102,7 +126,7 @@ export default function Navbar() {
       >
         <div
           className={[
-            "absolute inset-0 bg-black/60",
+            "absolute inset-0 bg-black/80", // 👈 MÁS OPACO
             "transition-opacity duration-200 ease-out",
             open ? "opacity-100" : "opacity-0",
           ].join(" ")}
@@ -110,21 +134,20 @@ export default function Navbar() {
         />
       </div>
 
-      {/* Panel */}
+      {/* Panel (más sólido/legible) */}
       <div
         id="mobile-menu"
         ref={panelRef}
         className={[
           "sm:hidden fixed left-0 right-0 top-0 z-50",
-          "pt-[76px] px-4 pb-6", // ⬅️ separa del header fijo
+          "pt-[76px] px-4 pb-6",
           "transition-transform duration-200 ease-[cubic-bezier(.22,1,.36,1)]",
           "will-change-transform transform-gpu",
           open ? "translate-y-0" : "-translate-y-[110%]",
         ].join(" ")}
         style={{
-          // ✅ panel "glass" premium pero liviano (sin blur pesado interno)
           background:
-            "linear-gradient(180deg, rgba(9,9,11,0.92) 0%, rgba(9,9,11,0.78) 60%, rgba(9,9,11,0.70) 100%)",
+            "linear-gradient(180deg, rgba(9,9,11,0.98) 0%, rgba(9,9,11,0.96) 55%, rgba(9,9,11,0.94) 100%)", // 👈 MENOS TRANSPARENTE
           borderBottom: "1px solid rgba(255,255,255,0.10)",
         }}
       >
@@ -146,10 +169,15 @@ export default function Navbar() {
 
           {/* Items */}
           <div className="mt-4 grid gap-2">
-            <MobileItem href="#features" label="Contenido" onPick={close} />
-            <MobileItem href="#bonos" label="Bonos" onPick={close} />
-            <MobileItem href="#testimonios" label="Testimonios" onPick={close} />
-            <MobileItem href="#faq" label="FAQ" onPick={close} />
+            {NAV_ITEMS.map((it) => (
+              <MobileItem
+                key={it.href}
+                href={it.href}
+                label={it.label}
+                onPick={() => {}}
+                onClick={go(it.href)}
+              />
+            ))}
           </div>
 
           {/* CTA */}
@@ -163,17 +191,17 @@ export default function Navbar() {
             </NavLink>
 
             <a
-              href="#contacto"
-              onClick={close}
+              href="#cta"
+              onClick={go("#cta")}
               className="inline-flex h-12 items-center justify-center rounded-full border border-white/15 bg-white/5 px-5 text-sm font-semibold text-white hover:bg-white/10 transition active:scale-[0.99]"
             >
-              Solicitar asesoría
+              Ver CTA
             </a>
           </div>
 
-          {/* Footer hint */}
           <p className="mt-4 text-xs text-zinc-500">
-            Tip: toca fuera del panel o presiona <span className="text-zinc-300">ESC</span> para cerrar.
+            Tip: toca fuera del panel o presiona{" "}
+            <span className="text-zinc-300">ESC</span> para cerrar.
           </p>
         </div>
       </div>
@@ -184,25 +212,26 @@ export default function Navbar() {
 function MobileItem({
   href,
   label,
-  onPick,
+  onClick,
 }: {
   href: string;
   label: string;
   onPick: () => void;
+  onClick: (e: React.MouseEvent) => void;
 }) {
   return (
     <a
       href={href}
-      onClick={onPick}
+      onClick={onClick}
       className={[
         "group flex items-center justify-between",
-        "rounded-2xl border border-white/10 bg-white/[0.04]",
+        "rounded-2xl border border-white/12 bg-white/[0.06]", // 👈 un poco más sólido
         "px-4 py-4",
-        "transition active:scale-[0.99] hover:bg-white/[0.07]",
+        "transition active:scale-[0.99] hover:bg-white/[0.09]",
       ].join(" ")}
     >
       <span className="text-sm font-semibold text-white">{label}</span>
-      <span className="text-zinc-400 group-hover:text-white transition">→</span>
+      <span className="text-zinc-300 group-hover:text-white transition">→</span>
     </a>
   );
 }
