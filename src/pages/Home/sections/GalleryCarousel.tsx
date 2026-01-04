@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, animate, useMotionValue } from "framer-motion";
 
 // ✅ IMPORTS (Vite los resuelve como string URL)
 import evidenciaImg from "../../../gallery/evidencia.webp";
@@ -60,6 +60,9 @@ export default function GalleryCarousel() {
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const [vw, setVw] = useState(0);
 
+  // ✅ MotionValue para mover el track con mejor FPS
+  const x = useMotionValue(0);
+
   const prev = () => setI((v) => (v - 1 + slides.length) % slides.length);
   const next = () => setI((v) => (v + 1) % slides.length);
 
@@ -76,6 +79,31 @@ export default function GalleryCarousel() {
 
     return () => ro.disconnect();
   }, []);
+
+  // ✅ Animación optimizada al cambiar slide / resize
+  const goTo = (idx: number, instant = false) => {
+    const target = -idx * vw;
+    x.stop?.();
+
+    animate(x, target, {
+      type: "tween",
+      duration: instant ? 0 : 0.24, // ⚡ más rápida
+      ease: [0.22, 1, 0.36, 1],
+    });
+  };
+
+  useEffect(() => {
+    if (!vw) return;
+    // en resize mejor instant para evitar saltos raros
+    goTo(i, true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [vw]);
+
+  useEffect(() => {
+    if (!vw) return;
+    goTo(i);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [i]);
 
   // ✅ Autoplay (un poco más ágil)
   useEffect(() => {
@@ -105,7 +133,7 @@ export default function GalleryCarousel() {
           </p>
         </div>
 
-        {/* Frame (marcos más delgados + menos padding) */}
+        {/* Frame */}
         <div
           className="relative mt-10 overflow-hidden rounded-[24px] border border-white/10 bg-white/[0.035]"
           onMouseEnter={() => setHover(true)}
@@ -125,17 +153,21 @@ export default function GalleryCarousel() {
             <div ref={viewportRef} className="overflow-hidden">
               {/* Track */}
               <motion.div
-                className="flex"
+                className="flex transform-gpu"
                 drag="x"
                 dragElastic={0.06}
                 dragMomentum={false}
+                onDragStart={() => setHover(true)}
                 onDragEnd={(_, info) => {
+                  // al soltar, reactivamos hover=false para que autoplay siga
+                  setHover(false);
+
                   if (info.offset.x < -swipeThreshold) next();
                   if (info.offset.x > swipeThreshold) prev();
+                  // si no superó el threshold, vuelve al slide actual
+                  if (Math.abs(info.offset.x) <= swipeThreshold) goTo(i);
                 }}
-                animate={{ x: -i * vw }}
-                transition={{ type: "tween", duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
-                style={{ willChange: "transform" }}
+                style={{ x, willChange: "transform" }}
               >
                 {slides.map((s, idx) => (
                   <div
@@ -203,15 +235,13 @@ export default function GalleryCarousel() {
 function Card({ slide, active }: { slide: Slide; active: boolean }) {
   return (
     <div className="relative overflow-hidden rounded-[20px] border border-white/10 bg-zinc-950/35">
-      {/* ✅ En md+: 2 columnas (imagen grande + texto). En mobile: imagen arriba */}
       <div className="grid md:grid-cols-[1.15fr_0.85fr]">
         {/* Media */}
         <div className="relative overflow-hidden">
-          {/* Mobile: cuadrado. Desktop: alto flexible */}
           <div className="relative aspect-square md:aspect-auto md:min-h-[420px]">
-            {/* Fondo blur más ligero */}
+            {/* Fondo blur más ligero (mejor FPS) */}
             <div
-              className="absolute inset-0 scale-105 blur-xl opacity-25"
+              className="absolute inset-0 scale-105 blur-md opacity-20"
               style={{
                 backgroundImage: `url(${slide.src})`,
                 backgroundSize: "cover",
@@ -224,7 +254,7 @@ function Card({ slide, active }: { slide: Slide; active: boolean }) {
               alt={slide.title}
               className={[
                 "relative z-[1] h-full w-full object-contain p-2 sm:p-3 md:p-4",
-                "transition-transform duration-250",
+                "transition-transform duration-200",
                 active ? "scale-[1.03]" : "scale-100",
               ].join(" ")}
               loading="lazy"
@@ -232,7 +262,6 @@ function Card({ slide, active }: { slide: Slide; active: boolean }) {
               draggable={false}
             />
 
-            {/* Overlays suaves */}
             <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-t from-zinc-950/35 via-transparent to-transparent" />
             <div className="pointer-events-none absolute inset-0 z-[2] ring-1 ring-white/10" />
 
@@ -246,7 +275,7 @@ function Card({ slide, active }: { slide: Slide; active: boolean }) {
           </div>
         </div>
 
-        {/* Copy (más espacio para la imagen, sin taparla) */}
+        {/* Copy */}
         <div className="relative p-4 sm:p-5 md:p-6">
           <h3 className="font-heading text-xl sm:text-2xl font-semibold tracking-[-0.02em] text-white">
             {slide.title}
@@ -255,7 +284,6 @@ function Card({ slide, active }: { slide: Slide; active: boolean }) {
             {slide.desc}
           </p>
 
-          {/* Detalle visual */}
           <div className="mt-4 h-px w-full bg-gradient-to-r from-white/10 via-white/5 to-transparent" />
           <p className="mt-4 text-xs sm:text-sm text-zinc-400">
             Desliza para ver más evidencias del sistema.
